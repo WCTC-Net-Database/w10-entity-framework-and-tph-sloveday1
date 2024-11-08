@@ -1,4 +1,4 @@
-﻿public class Room
+public abstract class Ability
 {
     public int Id { get; set; }
     public string Name { get; set; }

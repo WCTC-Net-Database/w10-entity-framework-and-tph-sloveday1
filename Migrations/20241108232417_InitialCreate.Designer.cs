@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using W9_assignment_template.Data;
 
@@ -10,9 +11,10 @@ using W9_assignment_template.Data;
 namespace W9_assignment_template.Migrations
 {
     [DbContext(typeof(GameContext))]
-    partial class GameContextModelSnapshot : ModelSnapshot
+    [Migration("20241108232417_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,49 +23,7 @@ namespace W9_assignment_template.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("Ability", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Abilities");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("Ability");
-                });
-
-            modelBuilder.Entity("AbilityCharacter", b =>
-                {
-                    b.Property<int>("AbilitiesId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CharactersId")
-                        .HasColumnType("int");
-
-                    b.HasKey("AbilitiesId", "CharactersId");
-
-                    b.HasIndex("CharactersId");
-
-                    b.ToTable("CharacterAbilities", (string)null);
-                });
-
-            modelBuilder.Entity("Character", b =>
+            modelBuilder.Entity("W9_assignment_template.Models.Character", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -94,7 +54,7 @@ namespace W9_assignment_template.Migrations
                     b.HasDiscriminator<string>("Discriminator").HasValue("Character");
                 });
 
-            modelBuilder.Entity("Room", b =>
+            modelBuilder.Entity("W9_assignment_template.Models.Room", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -115,29 +75,9 @@ namespace W9_assignment_template.Migrations
                     b.ToTable("Rooms");
                 });
 
-            modelBuilder.Entity("GoblinAbility", b =>
-                {
-                    b.HasBaseType("Ability");
-
-                    b.Property<int>("Taunt")
-                        .HasColumnType("int");
-
-                    b.HasDiscriminator().HasValue("GoblinAbility");
-                });
-
-            modelBuilder.Entity("PlayerAbility", b =>
-                {
-                    b.HasBaseType("Ability");
-
-                    b.Property<int>("Shove")
-                        .HasColumnType("int");
-
-                    b.HasDiscriminator().HasValue("PlayerAbility");
-                });
-
             modelBuilder.Entity("W9_assignment_template.Models.Goblin", b =>
                 {
-                    b.HasBaseType("Character");
+                    b.HasBaseType("W9_assignment_template.Models.Character");
 
                     b.Property<int>("AggressionLevel")
                         .HasColumnType("int");
@@ -147,7 +87,7 @@ namespace W9_assignment_template.Migrations
 
             modelBuilder.Entity("W9_assignment_template.Models.Player", b =>
                 {
-                    b.HasBaseType("Character");
+                    b.HasBaseType("W9_assignment_template.Models.Character");
 
                     b.Property<int>("Experience")
                         .HasColumnType("int");
@@ -155,24 +95,9 @@ namespace W9_assignment_template.Migrations
                     b.HasDiscriminator().HasValue("Player");
                 });
 
-            modelBuilder.Entity("AbilityCharacter", b =>
+            modelBuilder.Entity("W9_assignment_template.Models.Character", b =>
                 {
-                    b.HasOne("Ability", null)
-                        .WithMany()
-                        .HasForeignKey("AbilitiesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Character", null)
-                        .WithMany()
-                        .HasForeignKey("CharactersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Character", b =>
-                {
-                    b.HasOne("Room", "Room")
+                    b.HasOne("W9_assignment_template.Models.Room", "Room")
                         .WithMany("Characters")
                         .HasForeignKey("RoomId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -181,7 +106,7 @@ namespace W9_assignment_template.Migrations
                     b.Navigation("Room");
                 });
 
-            modelBuilder.Entity("Room", b =>
+            modelBuilder.Entity("W9_assignment_template.Models.Room", b =>
                 {
                     b.Navigation("Characters");
                 });
